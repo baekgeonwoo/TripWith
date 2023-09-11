@@ -1,0 +1,46 @@
+import { apiInstance } from "@/api/index.js"
+
+const api = apiInstance();
+const suffix = 'https://apis-navi.kakaomobility.com/v1/waypoints/directions';
+
+function multiWaypoints(requestObject, success, fail) {
+    api.defaults.headers.common['Authorization'] = process.env.VUE_APP_KAKAO_MOBILITY_REST_API_KEY;
+    api.defaults.headers.common['Content-Type'] = application / json;
+
+    api.post(suffix, { params: requestObject },{headers : {'Content-Type':'application/json', 'Authrization':'KakaoAK {APIKEY}'}})
+        .then(({ data }) => {
+            success(data);
+        })
+        .catch(error => {
+            fail(error);
+        });
+}
+
+function makeRequestObject(attractions) {
+    let origin = {
+        x: attractions[0].longitude,
+        y: attractions[0].latitude,
+    }
+    
+    let destination = {
+        x: attractions[attractions.length - 1].longitude,
+        y: attractions[attractions.length - 1].latitude,
+    }
+
+    attractions = attractions.slice(1, attractions.length);
+    let waypoints = attractions.map(({ name, longitude, latitude }) => {
+        return {
+            name,
+            x: longitude,
+            y: latitude,
+        }
+    })
+
+    return {
+        origin,
+        destination,
+        waypoints,
+    }
+}
+
+export { multiWaypoints, makeRequestObject }
